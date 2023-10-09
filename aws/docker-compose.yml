@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  aws-server:
+    image: localstack/localstack:0.14.5
+    container_name: aws-server
+    hostname: aws-server
+    ports:
+      - "127.0.0.1:14510-14559:4510-4559"  # external service port range
+      - "127.0.0.1:4566:4566"              # LocalStack Edge Proxy
+    environment:
+      - DEBUG=1
+      - AWS_DEFAULT_REGION=us-east-1
+      - DATA_DIR=/tmp/localstack/data
+      - EXTRA_CORS_ALLOWED_ORIGINS=https://app.localstack.cloud.
+    volumes:
+      - localstack-data:/tmp/localstack
+    restart: always
+  # aws-cdk:
+  #   image: aws-cdk
+  #   container_name: aws-cdk
+  #   hostname: aws-cdk
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - 8323:80
+  #   depends_on:
+  #     - aws-server
+
+volumes:
+  localstack-data:
+    name: localstack-data
+
+networks:
+  default:
+    external: true
+    name: local-network
