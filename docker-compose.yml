@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   aws-server:
-    image: localstack/localstack:0.14.5
+    image: localstack/localstack
     container_name: aws-server
     hostname: aws-server
     ports:
@@ -13,26 +13,12 @@ services:
       - AWS_DEFAULT_REGION=us-east-1
       - DATA_DIR=/tmp/localstack/data
       - EXTRA_CORS_ALLOWED_ORIGINS=https://app.localstack.cloud.
+      - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
       - localstack-data:/tmp/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: always
-  # aws-cdk:
-  #   image: aws-cdk
-  #   container_name: aws-cdk
-  #   hostname: aws-cdk
-  #   build:
-  #     context: .
-  #     dockerfile: ./Dockerfile
-  #   ports:
-  #     - 8323:80
-  #   depends_on:
-  #     - aws-server
 
 volumes:
   localstack-data:
     name: localstack-data
-
-networks:
-  default:
-    external: true
-    name: local-network
