@@ -5,6 +5,10 @@ import { Cluster } from 'aws-cdk-lib/aws-ecs';
 import { HttpApi } from '@aws-cdk/aws-apigatewayv2-alpha';
 
 export class NetworkStack extends Stack {
+  readonly vpcClusterArn: string
+  readonly httpVpcLinkRef: string
+  readonly httpApiId: string
+
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -15,6 +19,7 @@ export class NetworkStack extends Stack {
     const cluster = new Cluster(this, 'ApiVpcCluster', {
       vpc: vpc
     });
+    this.vpcClusterArn = cluster.clusterArn;
 
     const httpVpcLink = new CfnResource(this, 'HttpVpcLink', {
       type: 'AWS::ApiGatewayV2::VpcLink',
@@ -23,11 +28,13 @@ export class NetworkStack extends Stack {
         SubnetIds: vpc.privateSubnets.map(m => m.subnetId)
       }
     });
+    this.httpVpcLinkRef = httpVpcLink.ref;
 
     const api = new HttpApi(this, 'HttpApiGateway', {
-      apiName: 'ApigwFargate',
-      description: 'Integration between apigw and Application Load-Balanced Fargate Service',
+      apiName: 'ServiceApi',
+      description: 'Integration between api gateway and Application Load-Balanced services',
     });
+    this.httpApiId = api.apiId;
 
     new CfnOutput(this, 'APIGatewayUrl', {
       description: 'API Gateway URL to access the API endpoint',
