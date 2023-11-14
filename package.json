@@ -1,7 +1,7 @@
 {
   "name": "aws-cdk",
   "version": "0.1.0",
-  "description": "Responsible for the provisioning of AWS resources",
+  "description": "Responsible for the provisioning of core AWS resources",
   "scripts": {
     "synth": "cdklocal synth",
     "bootstrap": "cdklocal bootstrap",
