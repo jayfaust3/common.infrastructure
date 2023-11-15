@@ -18,6 +18,17 @@ services:
       - localstack-data:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
     restart: always
+  # aws-cdk:
+  #   image: aws-cdk
+  #   container_name: aws-cdk
+  #   hostname: aws-cdk
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile
+  #   ports:
+  #     - 8323:80
+  #   depends_on:
+  #     - aws-server
 
 volumes:
   localstack-data:

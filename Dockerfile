@@ -5,8 +5,7 @@ WORKDIR /usr/aws-cdk
 COPY package.json .
 
 RUN npm install\
-    && npm install typescript -g\
-    && npm install cdklocal -g
+    && npm install -g aws-cdk-local aws-cdk typescript
 
 COPY . .
 
